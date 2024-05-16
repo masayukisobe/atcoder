@@ -31,21 +31,19 @@ int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
-  int D,N,M;
-  cin >> D >> N >> M;
+  int n,q;
   
-  vi s(N);
-  rep(i,N-1) cin >> s[i+1];
+  cin >> n;
+  vi s(n);
+  rep(i,n) cin >> s[i];
   sort(s.begin(),s.end());
-
-  ll ans = 0;
-  rep(i,M) {
-    int k; cin >> k;
-    auto it = lower_bound(s.begin(),s.end(),k);
-    int d1 = (it==s.end() ? s[0]+D : (*it));
-    int d2 = (it==s.begin() ? s[N-1]-D : *(it-1));
-    assert(d1>=k and k>=d2);
-    ans += min((d1-k)%D,(k-d2)%D);
+  
+  cin >> q;
+  int ans = 0;
+  rep(i,q) {
+    int t; cin >> t;
+    auto it = lower_bound(s.begin(),s.end(),t);
+    if (it!=s.end() and (*it)==t) ans++;
   }
   cout << ans << endl;
   return 0;

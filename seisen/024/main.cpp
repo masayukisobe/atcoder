@@ -13,9 +13,9 @@ using namespace std;
 #define vll vector<ll>
 #define endl '\n'
 #define _(x) #x << "=" << x << " "
-#define debug(x) cout << _(x) << endl
-#define debug2(x,y) cout << _(x) << _(y) << endl
-#define debug3(x,y,z) cout << _(x) << _(y) << _(z) << endl
+#define debug(x) cerr << _(x) << endl
+#define debug2(x,y) cerr << _(x) << _(y) << endl
+#define debug3(x,y,z) cerr << _(x) << _(y) << _(z) << endl
 #define popcount __builtin_popcount
 #define INF INT_MAX
 #define LL_INF LLONG_MAX
@@ -33,18 +33,32 @@ int main() {
   
   int N;
   cin >> N;
-  vi P(N),Q(N),R(N);
-  rep(i,N) cin>>P[i];
-  rep(i,N) cin>>Q[i];
-  iota(R.begin(),R.end(),1);
-
-  int p=-1,q=-1,n=0;
-  do {
-    n++;
-    if (p<0 and P==R) p=n;
-    if (q<0 and Q==R) q=n;
-  } while(next_permutation(R.begin(),R.end()));
-  cout << abs(p-q) << endl;
+  vvi e(N);
+  rep(i,N) {
+    int n,k;
+    cin >> n >> k; n--;
+    e[n].resize(k);
+    rep(j,k) {
+      cin >> e[n][j];
+      e[n][j]--;
+    }
+    sort(e[n].begin(),e[n].end());
+  }
+  vector<ii> ts(N);
+  int t=0;
+  auto dfs = [&](auto& dfs, int i)->void{
+    ts[i].first=++t;
+    for (int j: e[i]) {
+      if (ts[j].first==0) dfs(dfs,j);
+    }
+    ts[i].second=++t;
+  };
+  rep(i,N) {
+    if (ts[i].first==0) dfs(dfs,i);
+  }
+  rep(i,N) {
+    cout << (i+1) << " " << ts[i].first << " " << ts[i].second << endl;
+  }
   return 0;
 }
 

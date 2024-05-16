@@ -31,21 +31,48 @@ int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
-  int n,q;
+  int N;
+  cin >> N;
+  vi x(N),y(N);
+  rep(i,N) cin >> y[i] >> x[i];
+
+  vi P(8);
+  iota(P.begin(),P.end(),0);
   
-  cin >> n;
-  vi s(n);
-  rep(i,n) cin >> s[i];
-  sort(s.begin(),s.end());
-  
-  cin >> q;
-  int ans = 0;
-  rep(i,q) {
-    int t; cin >> t;
-    auto it = lower_bound(s.begin(),s.end(),t);
-    if (it!=s.end() and (*it)==t) ans++;
-  }
-  cout << ans << endl;
+  do {
+    // check input condition
+    bool ok=true;
+    rep(i,N) {
+      if (P[y[i]]!=x[i]) {
+        ok=false; break;
+      }
+    }
+    if (!ok) continue;
+
+    // check placement
+    ok=true;
+    rep(i,7) {
+      int diag1=i+P[i];
+      int diag2=i-P[i];
+      rep2(j,i+1,8) {
+        int diag3=j+P[j];
+        int diag4=j-P[j];
+        if (diag1==diag3 or diag2==diag4) {
+          ok=false;
+          break;
+        }
+      }
+    }
+    if (ok) {
+      rep(i,8) {
+        rep(j,8) {
+          cout << (j==P[i] ? 'Q' : '.');
+        }
+        cout << endl;
+      }
+      return 0;
+    }
+  } while (next_permutation(P.begin(),P.end()));
   return 0;
 }
 

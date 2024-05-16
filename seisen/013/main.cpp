@@ -31,27 +31,26 @@ int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
-  int K,N;
-  cin >> N >> K;
-  vi a(N);
-  rep(i,N) cin >> a[i];
-  ll ans = LL_INF;
-  for (int mask=0; mask<(1<<N); mask++) {
-    if (popcount(mask)!=K) continue;
-    int h=0;
-    ll cost=0;
-    int c=0;
-    rep(j,N) {
-      if ((1<<j)&mask) {
-        if (h>=a[j]) {
-          h++; cost += h-a[j];
-        }
-      }
-      h = max(h,a[j]);
+  int R,C;
+  cin >> R >> C;
+  vi v(C);
+  rep(i,R) {
+    int bit = 1<<i;
+    rep(j,C) {
+      int x; cin >> x;
+      if (x) v[j] |= bit;
     }
-    ans = min(ans,cost);
   }
-  cout << ans << endl;
+  ll ans = 0;
+  for (int mask=0; mask<(1<<R); mask++) {
+    ll best = 0;
+    rep(j,C) {
+      int n = popcount(v[j]^mask);
+      best += max(n,R-n);
+    }
+    ans = max(ans,best);
+  }
+  cout << ans <<endl;
   return 0;
 }
 

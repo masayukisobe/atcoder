@@ -27,24 +27,40 @@ using namespace std;
 //#include <atcoder/all>
 //using namespace atcoder;
 
+double dist(ii& a, ii& b) {
+  double x1 = a.first;
+  double y1 = a.second;
+  double x2 = b.first;
+  double y2 = b.second;
+  double dx=x2-x1;
+  double dy=y2-y1;
+  return sqrt(dx*dx+dy*dy);
+}
+
 int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
   int N;
   cin >> N;
-  vi P(N),Q(N),R(N);
-  rep(i,N) cin>>P[i];
-  rep(i,N) cin>>Q[i];
-  iota(R.begin(),R.end(),1);
-
-  int p=-1,q=-1,n=0;
+  
+  vector<ii> v;
+  v.reserve(N);
+  rep(i,N) {
+    int x,y; cin >> x >> y;
+    v.emplace_back(x,y);
+  }
+  
+  vi p(N);
+  iota(p.begin(),p.end(),0);
+  
+  double num=0;
+  double total=0;
   do {
-    n++;
-    if (p<0 and P==R) p=n;
-    if (q<0 and Q==R) q=n;
-  } while(next_permutation(R.begin(),R.end()));
-  cout << abs(p-q) << endl;
+    num += 1.0;
+    rep(i,N-1) total+=dist(v[p[i]],v[p[i+1]]);
+  } while (next_permutation(p.begin(),p.end()));
+  cout << fixed << setprecision(10) << total / num << endl;
   return 0;
 }
 

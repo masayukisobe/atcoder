@@ -31,20 +31,25 @@ int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
-  int N;
-  cin >> N;
-  vi P(N),Q(N),R(N);
-  rep(i,N) cin>>P[i];
-  rep(i,N) cin>>Q[i];
-  iota(R.begin(),R.end(),1);
-
-  int p=-1,q=-1,n=0;
-  do {
-    n++;
-    if (p<0 and P==R) p=n;
-    if (q<0 and Q==R) q=n;
-  } while(next_permutation(R.begin(),R.end()));
-  cout << abs(p-q) << endl;
+  ll N,M;
+  cin >> N >> M;
+  vll v(N+1);
+  rep(i,N) cin>>v[i+1];
+  N++;
+  
+  vll w;
+  rep(i,N) rep2(j,i,N) {
+    w.push_back(v[i]+v[j]);
+  }
+  sort(w.begin(),w.end());
+  
+  ll ans = 0;
+  for (ll a:w) {
+    if (a>M) continue;
+    auto it=lower_bound(w.begin(),w.end(),(M-a)+1);
+    ans = max(ans,a+*(it-1));
+  }
+  cout << ans << endl;
   return 0;
 }
 

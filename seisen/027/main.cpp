@@ -13,9 +13,9 @@ using namespace std;
 #define vll vector<ll>
 #define endl '\n'
 #define _(x) #x << "=" << x << " "
-#define debug(x) cout << _(x) << endl
-#define debug2(x,y) cout << _(x) << _(y) << endl
-#define debug3(x,y,z) cout << _(x) << _(y) << _(z) << endl
+#define debug(x) cerr << _(x) << endl
+#define debug2(x,y) cerr << _(x) << _(y) << endl
+#define debug3(x,y,z) cerr << _(x) << _(y) << _(z) << endl
 #define popcount __builtin_popcount
 #define INF INT_MAX
 #define LL_INF LLONG_MAX
@@ -31,20 +31,28 @@ int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
-  int N;
-  cin >> N;
-  vi P(N),Q(N),R(N);
-  rep(i,N) cin>>P[i];
-  rep(i,N) cin>>Q[i];
-  iota(R.begin(),R.end(),1);
+  int W,H;
+  cin >> W >> H;
+  vi v(H*W);
+  rep(i,H) rep(j,W) cin >> v[i*W+j];
 
-  int p=-1,q=-1,n=0;
-  do {
-    n++;
-    if (p<0 and P==R) p=n;
-    if (q<0 and Q==R) q=n;
-  } while(next_permutation(R.begin(),R.end()));
-  cout << abs(p-q) << endl;
+  int ans=0;
+  auto dfs = [&](auto& dfs, int i, int d)->void {
+    if (v[i]==0) return;
+    v[i]=0;
+    {
+      ans = max(d,ans);
+      d++;
+      int x=i%W,y=i/W;
+      if (x>0) dfs(dfs,i-1,d);
+      if (y>0) dfs(dfs,i-W,d);
+      if (x<W-1) dfs(dfs,i+1,d);
+      if (y<H-1) dfs(dfs,i+W,d);
+    }
+    v[i]=1;
+  };
+  rep(i,H*W) dfs(dfs,i,1);
+  cout << ans << endl;
   return 0;
 }
 

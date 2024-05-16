@@ -27,24 +27,26 @@ using namespace std;
 //#include <atcoder/all>
 //using namespace atcoder;
 
+double f(double x, double P) {
+  return x+P/pow(2.0,x/1.5);
+}
+
 int main() {
   ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   
-  int N;
-  cin >> N;
-  vi P(N),Q(N),R(N);
-  rep(i,N) cin>>P[i];
-  rep(i,N) cin>>Q[i];
-  iota(R.begin(),R.end(),1);
-
-  int p=-1,q=-1,n=0;
-  do {
-    n++;
-    if (p<0 and P==R) p=n;
-    if (q<0 and Q==R) q=n;
-  } while(next_permutation(R.begin(),R.end()));
-  cout << abs(p-q) << endl;
+  double P;
+  cin >> P;
+  double lb=0, ub=1e10;
+  while (ub-lb>0.0000000001) {
+    double c = (ub-lb)/3;
+    double a = lb+c;
+    double b = ub-c;
+    double fa = f(a,P);
+    double fb = f(b,P);
+    if (fa < fb) ub=b; else lb=a;
+  }
+  cout << fixed << setprecision(10) << f(ub,P) << endl;
   return 0;
 }
 
